@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./HomePage.css"; // Import the CSS for styling
-import electrician from '../assests/electrician.png'
+import electrician from '../assets/electrician.png'
 const HomePage = () => {
   return (
     <div className="homepage">
