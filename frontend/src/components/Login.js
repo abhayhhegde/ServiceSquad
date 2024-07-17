@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+import './Login.css'; // Import the CSS file
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -14,9 +14,8 @@ function Login() {
     try {
       const response = await axios.post('http://localhost:5000/login', { username, password });
       setMessage(response.data.message);
-      if(response.data.message==='Login successful'){
-        alert("Successfully logged!!")
-        window.location.href = '/homepage';
+      if (response.data.message === 'Login successful') {
+        window.location.href = '/servicepage';
       }
     } catch (error) {
       setMessage('Invalid credentials');
@@ -24,20 +23,20 @@ function Login() {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        <div>
+        <div className="input-group">
           <label>Username:</label>
           <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
         </div>
-        <div>
+        <div className="input-group">
           <label>Password:</label>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
-        <button type="submit" class='login'>Login</button>
+        <button type="submit" className="login">Login</button>
       </form>
-      <p>{message}</p>
+      <p className="message">{message}</p>
       <p>New user? <Link to="/signup">Sign up here</Link></p>
     </div>
   );

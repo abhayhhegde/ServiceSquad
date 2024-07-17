@@ -12,9 +12,9 @@ app.use(bodyParser.json());
 
 // MySQL Database Connection
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "app_user", // Your QL username
-  password: "root", // Your MySQL password
+  host: "192.168.1.7",
+  user: "ABHAY", // Your SQL username
+  password: "Abh@y123", // Your MySQL password
   database: "service_provider_db",
 });
 
@@ -41,6 +41,7 @@ db.connect((err) => {
 // Routes
 app.post("/register", (req, res) => {
   const { username, password } = req.body;
+  console.log(req.body);
   db.query(
     `INSERT INTO users (username, password) VALUES (?, ?)`,
     [username, password],
@@ -56,6 +57,7 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
+ 
   db.query(
     `SELECT * FROM users WHERE username = ? AND password = ?`,
     [username, password],

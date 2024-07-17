@@ -1,6 +1,7 @@
 // src/components/SignUp.js
 import React, { useState } from "react";
 import axios from "axios";
+import './SignUp.css'; // Import the CSS file
 
 function SignUp() {
   const [username, setUsername] = useState("");
@@ -20,16 +21,17 @@ function SignUp() {
         password,
       });
       setMessage("Registration successful");
+      window.location.href='/login';
     } catch (error) {
       setMessage("Error during registration");
     }
   };
 
   return (
-    <div>
+    <div className="signup-container">
       <h2>Sign Up</h2>
       <form onSubmit={handleSignUp}>
-        <div>
+        <div className="input-group">
           <label>Username:</label>
           <input
             type="text"
@@ -38,7 +40,7 @@ function SignUp() {
             required
           />
         </div>
-        <div>
+        <div className="input-group">
           <label>Password:</label>
           <input
             type="password"
@@ -47,7 +49,7 @@ function SignUp() {
             required
           />
         </div>
-        <div>
+        <div className="input-group">
           <label>Confirm Password:</label>
           <input
             required
@@ -56,9 +58,10 @@ function SignUp() {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
-        <button type="submit">Sign Up</button>
+        <button type="submit" className="signup">Sign Up</button>
+        
       </form>
-      <p>{message}</p>
+      <p className="message">{message}</p>
     </div>
   );
 }
