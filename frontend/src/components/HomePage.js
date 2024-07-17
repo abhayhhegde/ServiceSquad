@@ -3,6 +3,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./HomePage.css"; // Import the CSS for styling
 import electrician from '../assets/electrician.png'
+import carpenter from '../assets/carpenters.png'
+import plumber from '../assets/plumber.png'
 const HomePage = () => {
   return (
     <div className="homepage">
@@ -40,21 +42,21 @@ const HomePage = () => {
       </section>
 
       <section className="services">
-        <h2>Our Services</h2>
+        <h2>Our Top-Services</h2>
         <div className="service-card">
           <img src={electrician} alt="Service 1" />
-          <h3>Service 1</h3>
-          <p>We provide top-notch service 1 to ensure your complete satisfaction.</p>
+          <h3>ELECTRICIANS</h3>
+          <p>We provide top-notch electrician to ensure your complete satisfaction.</p>
         </div>
         <div className="service-card">
-          <img src="https://via.placeholder.com/150" alt="Service 2" />
-          <h3>Service 2</h3>
-          <p>Our service 2 is designed to meet all your specific needs.</p>
+          <img src={carpenter} alt="Service 2" />
+          <h3>CARPENTERS</h3>
+          <p>We have the best carpenters in the market which are the most affordable.</p>
         </div>
         <div className="service-card">
-          <img src="https://via.placeholder.com/150" alt="Service 3" />
-          <h3>Service 3</h3>
-          <p>Experience excellence with our professional service 3.</p>
+          <img src={plumber} alt="Service 3" />
+          <h3>PLUMBERS</h3>
+          <p>Experience excellence with our professional plumbers.</p>
         </div>
       </section>
 

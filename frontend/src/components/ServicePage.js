@@ -1,13 +1,16 @@
 // src/components/ServicesPage.js
 import React from 'react';
 import './ServicePage.css';
+import electrician from '../assets/electrician.png'
+import carpenter from '../assets/carpenters.png'
+import plumber from '../assets/plumber.png'
 
 const services = [
   {
     id: 1,
-    title: 'Service 1',
+    title: 'Electrician',
     description: 'Experience top-notch quality at the comfort of your home.',
-    imageUrl: 'https://via.placeholder.com/300'
+    imageUrl: electrician
   },
   {
     id: 2,

@@ -27,7 +27,9 @@ db.connect((err) => {
       `CREATE TABLE IF NOT EXISTS users (
       id INT AUTO_INCREMENT PRIMARY KEY,
       username VARCHAR(255) NOT NULL,
-      password VARCHAR(255) NOT NULL
+      password VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL,
+      phone VARCHAR(255) NOT NULL
     )`,
       (err) => {
         if (err) {
@@ -40,11 +42,11 @@ db.connect((err) => {
 
 // Routes
 app.post("/register", (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, email, phone } = req.body;
   console.log(req.body);
   db.query(
-    `INSERT INTO users (username, password) VALUES (?, ?)`,
-    [username, password],
+    `INSERT INTO users (username, password, email, phone) VALUES (?, ?, ?, ?)`,
+    [username, password, email, phone],
     (err, result) => {
       if (err) {
         res.status(400).json({ error: err.message });
