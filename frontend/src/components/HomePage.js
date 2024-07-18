@@ -51,7 +51,7 @@ const HomePage = () => {
         <div className="service-card">
           <img src={carpenter} alt="Service 2" />
           <h3>CARPENTERS</h3>
-          <p>We have the best carpenters in the market which are the most affordable.</p>
+          <p>We have the best carpenters in the market with the most affordable price.</p>
         </div>
         <div className="service-card">
           <img src={plumber} alt="Service 3" />

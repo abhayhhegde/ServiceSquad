@@ -4,6 +4,9 @@ import './ServicePage.css';
 import electrician from '../assets/electrician.png'
 import carpenter from '../assets/carpenters.png'
 import plumber from '../assets/plumber.png'
+import janitor from '../assets/janitor.png'
+import mason from '../assets/mason.png'
+import gardener from '../assets/gardener.png'
 
 const services = [
   {
@@ -14,21 +17,39 @@ const services = [
   },
   {
     id: 2,
-    title: 'Service 2',
-    description: 'Professional services delivered to your doorstep.',
-    imageUrl: 'https://via.placeholder.com/300'
+    title: 'Carpenter',
+    description: 'We have the best carpenters in the market with the most affordable price',
+    imageUrl: carpenter
   },
   {
     id: 3,
-    title: 'Service 3',
-    description: 'Convenience and quality combined for your satisfaction.',
-    imageUrl: 'https://via.placeholder.com/300'
+    title: 'Plumbers',
+    description: 'Experience excellence with our professional plumbers.',
+    imageUrl: plumber
   },
   {
     id: 4,
-    title: 'Service 4',
-    description: 'Affordable and reliable services just a click away.',
-    imageUrl: 'https://via.placeholder.com/300'
+    title: 'Janitor',
+    description: 'Professional janitorial services for clean and well-maintained spaces.',
+    imageUrl: janitor
+  },
+  {
+    id: 5,
+    title: 'Mason',
+    description: 'Expert masonry services for durable and aesthetically pleasing structures.',
+    imageUrl: mason
+  },
+  {
+    id: 6,
+    title: 'Gardener',
+    description: 'Professional gardening services for beautiful and well-kept landscapes.',
+    imageUrl: gardener
+  },
+  {
+    id: 7,
+    title: 'Mechanic',
+    description: 'Expert masonry services for durable and aesthetically pleasing structures.',
+    imageUrl: gardener
   }
 ];
 
