@@ -85,6 +85,9 @@ const ServicesPage = () => {
           </Link>
         ))}
       </div>
+      <div>
+        <button className='provider' type='submit'>Become a service provider !</button>
+      </div>
     </div>
   );
 };
