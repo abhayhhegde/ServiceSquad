@@ -86,7 +86,7 @@ const ServicesPage = () => {
         ))}
       </div>
       <div>
-        <button className='provider' type='submit'>Become a service provider !</button>
+        <Link to='/become'><button className='provider' type='submit'>Become a service provider !</button></Link>
       </div>
     </div>
   );
