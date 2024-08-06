@@ -36,7 +36,7 @@ function Login() {
         </div>
         <button type="submit" className="login">Login</button>
       </form>
-      <p className="message">{message}</p>
+      <p className={`message ${message === "Login successful" ? "success" : "error"}`}>{message}</p>
       <p>New user? <Link to="/signup">Sign up here</Link></p>
     </div>
   );

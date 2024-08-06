@@ -42,22 +42,21 @@ const HomePage = () => {
       </section>
 
       <section className="services">
-        <h2>Our Top-Services</h2>
-        <div className="service-card">
+      <Link to='/electrician' className="service-card-link"><div className="service-card">
           <img src={electrician} alt="Service 1" />
-          <h3>ELECTRICIANS</h3>
+          <h3> ELECTRICIANS</h3>
           <p>We provide top-notch electrician to ensure your complete satisfaction.</p>
-        </div>
-        <div className="service-card">
+        </div></Link>
+        <Link to='/carpenter' className="service-card-link"><div className="service-card">
           <img src={carpenter} alt="Service 2" />
           <h3>CARPENTERS</h3>
           <p>We have the best carpenters in the market with the most affordable price.</p>
-        </div>
-        <div className="service-card">
+        </div></Link>
+        <Link to='/plumber' className="service-card-link"><div className="service-card">
           <img src={plumber} alt="Service 3" />
           <h3>PLUMBERS</h3>
           <p>Experience excellence with our professional plumbers.</p>
-        </div>
+        </div></Link>
       </section>
 
       <section className="cta">

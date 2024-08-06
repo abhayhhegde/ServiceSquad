@@ -86,4 +86,10 @@ body {
     font-size: 0.9em;
     color: red;
   }
+  .login-container .message.error {
+    color: red;
+  }
   
+  .login-container .message.success {
+    color: green;
+  }

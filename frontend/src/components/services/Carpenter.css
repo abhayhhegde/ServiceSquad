@@ -1,0 +1,52 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+.carpenter-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 50px 20px;
+  background-color: #f7f7f7;
+}
+
+.carpenter-container .provider-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  text-align: center;
+  overflow: hidden;
+  margin: 20px;
+  transition: transform 0.3s;
+}
+
+.carpenter-container .provider-card:hover {
+  transform: translateY(-10px);
+}
+
+.carpenter-container .provider-card h3 {
+  font-size: 1.5em;
+  margin: 20px 0 10px;
+  color: #333;
+}
+
+.carpenter-container .provider-card p {
+  font-size: 1em;
+  color: #666;
+  padding: 0 20px 20px;
+}
+
+.carpenter-container .provider-card .provider-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+   border-radius: 8px;
+  
+}
+
+.error-message {
+  color: red;
+  font-size: 1em;
+  margin-top: 20px;
+}

@@ -93,6 +93,10 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.service-card-link {
+  text-decoration: none;
+  color: inherit;
+}
 .service-card img {
   width: 150px;
   height: 150px;
