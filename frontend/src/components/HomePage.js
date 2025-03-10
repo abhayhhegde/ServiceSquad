@@ -2,29 +2,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./HomePage.css"; // Import the CSS for styling
-import electrician from '../assets/electrician.png'
-import carpenter from '../assets/carpenters.png'
-import plumber from '../assets/plumber.png'
+import electrician from "../assets/electrician.png";
+import carpenter from "../assets/carpenters.png";
+import plumber from "../assets/plumber.png";
+
 const HomePage = () => {
   return (
     <div className="homepage">
-      <nav className="navbar">
-        <h1 className="logo">ServiceSquad</h1>
-        <ul className="nav-links">
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/servicepage">Services</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <Link to="/contact">Contact</Link>
-          </li>
-        </ul>
-      </nav>
 
       <header className="header">
         <h1>Welcome to ServiceSquad</h1>
@@ -42,21 +26,27 @@ const HomePage = () => {
       </section>
 
       <section className="services">
-      <Link to='/electrician' className="service-card-link"><div className="service-card">
-          <img src={electrician} alt="Service 1" />
-          <h3> ELECTRICIANS</h3>
-          <p>We provide top-notch electrician to ensure your complete satisfaction.</p>
-        </div></Link>
-        <Link to='/carpenter' className="service-card-link"><div className="service-card">
-          <img src={carpenter} alt="Service 2" />
-          <h3>CARPENTERS</h3>
-          <p>We have the best carpenters in the market with the most affordable price.</p>
-        </div></Link>
-        <Link to='/plumber' className="service-card-link"><div className="service-card">
-          <img src={plumber} alt="Service 3" />
-          <h3>PLUMBERS</h3>
-          <p>Experience excellence with our professional plumbers.</p>
-        </div></Link>
+        <Link to="/electrician" className="service-card-link">
+          <div className="service-card">
+            <img src={electrician} alt="Service 1" />
+            <h3>ELECTRICIANS</h3>
+            <p>We provide top-notch electrician services to ensure your complete satisfaction.</p>
+          </div>
+        </Link>
+        <Link to="/carpenter" className="service-card-link">
+          <div className="service-card">
+            <img src={carpenter} alt="Service 2" />
+            <h3>CARPENTERS</h3>
+            <p>We have the best carpenters in the market with the most affordable prices.</p>
+          </div>
+        </Link>
+        <Link to="/plumber" className="service-card-link">
+          <div className="service-card">
+            <img src={plumber} alt="Service 3" />
+            <h3>PLUMBERS</h3>
+            <p>Experience excellence with our professional plumbers.</p>
+          </div>
+        </Link>
       </section>
 
       <section className="cta">
@@ -67,17 +57,6 @@ const HomePage = () => {
         </p>
       </section>
 
-      <footer className="footer">
-        <div className="auth-buttons">
-          <Link to="/login">
-            <button className="login-button">Login</button>
-          </Link>
-          <Link to="/signup">
-            <button className="signup-button">Sign Up</button>
-          </Link>
-        </div>
-        <p>&copy; 2024 ServiceSquad. All rights reserved.</p>
-      </footer>
     </div>
   );
 };
