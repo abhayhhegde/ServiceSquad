@@ -4,14 +4,14 @@ import Footer from "./Footer";
 import { Outlet } from "react-router-dom";
 import './Layout.css';
 
-const Layout = () => {
+const Layout = ({ isAuthenticated, setIsAuthenticated }) => {
   return (
     <div className="layout">
-      <Header />
+      <Header isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
       <main className="content">
         <Outlet /> 
       </main>
-      <Footer />
+      <Footer isAuthenticated={isAuthenticated} />
     </div>
   );
 };

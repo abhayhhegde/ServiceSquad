@@ -1,0 +1,233 @@
+/* Dashboard Container */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .dashboard-container h1 {
+    margin-bottom: 30px;
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Dashboard Tabs */
+  .dashboard-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e1e1e1;
+  }
+  
+  .tab-button {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.3s ease;
+  }
+  
+  .tab-button:hover {
+    color: #333;
+  }
+  
+  .tab-button.active {
+    color: #3498db;
+    border-bottom: 3px solid #3498db;
+  }
+  
+  /* Booking Cards */
+  .bookings-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+  }
+  
+  .booking-card {
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .booking-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
+  }
+  
+  .booking-header h3 {
+    margin: 0;
+    color: #333;
+    text-transform: capitalize;
+  }
+  
+  .booking-status {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 15px;
+  }
+  
+  .status-pending {
+    background-color: #ffeeba;
+    color: #856404;
+  }
+  
+  .status-accepted {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .status-completed {
+    background-color: #c3e6cb;
+    color: #0f5132;
+  }
+  
+  .status-cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .booking-details {
+    margin-bottom: 20px;
+  }
+  
+  .booking-details p {
+    margin: 8px 0;
+    font-size: 14px;
+  }
+  
+  .booking-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  /* Buttons */
+  .booking-actions button,
+  .booking-actions a,
+  .book-now-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  
+  .accept-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .accept-btn:hover {
+    background-color: #218838;
+  }
+  
+  .reject-btn, .cancel-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .reject-btn:hover, .cancel-btn:hover {
+    background-color: #c82333;
+  }
+  
+  .complete-btn {
+    background-color: #17a2b8;
+    color: white;
+  }
+  
+  .complete-btn:hover {
+    background-color: #138496;
+  }
+  
+  .review-btn {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .review-btn:hover {
+    background-color: #5a6268;
+  }
+  
+  .book-now-btn {
+    background-color: #3498db;
+    color: white;
+    display: inline-block;
+    margin-top: 20px;
+  }
+  
+  .book-now-btn:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Empty and Loading States */
+  .no-bookings {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .no-bookings p {
+    margin-bottom: 20px;
+    color: #666;
+  }
+  
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 18px;
+    color: #666;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  /* Booking Actions Bottom */
+  .booking-actions-bottom {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .bookings-list {
+      grid-template-columns: 1fr;
+    }
+    
+    .dashboard-tabs {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .tab-button {
+      width: 100%;
+      text-align: center;
+      padding: 15px;
+    }
+  }

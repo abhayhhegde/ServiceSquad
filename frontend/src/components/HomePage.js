@@ -9,7 +9,7 @@ import plumber from "../assets/plumber.png";
 const HomePage = () => {
   return (
     <div className="homepage">
-
+      
       <header className="header">
         <h1>Welcome to ServiceSquad</h1>
         <p>Your one-stop solution for all your service needs, right at your doorstep.</p>
@@ -56,7 +56,7 @@ const HomePage = () => {
           We guarantee satisfaction and excellence in every service we offer.
         </p>
       </section>
-
+    
     </div>
   );
 };

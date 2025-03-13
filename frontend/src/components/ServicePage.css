@@ -23,7 +23,7 @@
   .service-card {
     background: white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px #4CAF50;
     max-width: 300px;
     text-align: center;
     overflow: hidden;
@@ -68,5 +68,5 @@
     transition: background-color 0.3s ease;
   }
   .provider:hover{
-    background-color: grey
+    background-color: grey;
   }

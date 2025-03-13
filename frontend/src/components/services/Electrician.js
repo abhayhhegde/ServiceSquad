@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Electrician.css';
+import { useNavigate } from 'react-router-dom';
 
 const Electrician = () => {
   const [providers, setProviders] = useState([]);
   const [error, setError] = useState(null);
+  const navigate=useNavigate();
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -28,6 +30,11 @@ const Electrician = () => {
 
     fetchProviders();
   }, []);
+  const serviceType = "electrician";
+  const handleBookService = (providerId) => {
+    navigate(`/booking/${encodeURIComponent(providerId)}/${serviceType}`);
+
+  };
 
   return (
     <>
@@ -52,6 +59,12 @@ const Electrician = () => {
               <p>Phone: {provider.phone}</p>
             </div>
           )}
+          <button 
+              className="book-button"
+              onClick={() => handleBookService(provider.email)}
+            >
+              Book Service
+            </button>
         </div>
       ))}
     </div>
