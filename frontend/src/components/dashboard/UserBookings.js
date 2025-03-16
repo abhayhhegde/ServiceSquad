@@ -124,7 +124,7 @@ function UserBookings() {
       </div>
       
       <div className="booking-actions-bottom">
-        <Link to="/services" className="book-now-btn">Book Another Service</Link>
+        <Link to="/servicepage" className="book-now-btn">Book Another Service</Link>
       </div>
     </div>
   );

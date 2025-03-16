@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 // Middleware
@@ -440,89 +440,23 @@ app.get("/user/bookings", verifyToken, (req, res) => {
 
 // Get provider's service requests
 app.get("/provider/bookings", verifyToken, (req, res) => {
-  const provider_id = req.user.id; // This is a numeric ID
+  const provider_id = req.user.id;
 
-  // Fetch the provider's email from the `users` table
-  db.query(`SELECT email FROM users WHERE id = ?`, [provider_id], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    
-    if (results.length === 0) {
-      return res.status(404).json({ error: "Provider not found" });
-    }
-
-    const provider_email = results[0].email; // Now we have the email
-
-    db.query(
-      `SELECT b.*, u.username AS client_name, u.phone AS client_phone
-       FROM bookings b
-       JOIN users u ON b.user_id = u.id
-       WHERE b.provider_id = ? 
-       ORDER BY STR_TO_DATE(b.booking_date, '%Y-%m-%d') DESC, b.booking_time DESC`,
-      [provider_email],  // Use the fetched email here
-      (err, results) => {
-        if (err) {
-          return res.status(500).json({ error: err.message });
-        }
-        res.json(results);
+  db.query(
+    `SELECT b.*, u.username AS client_name, u.phone AS client_phone,u.email AS client_email
+     FROM bookings b
+     JOIN users u ON b.user_id = u.id
+     WHERE b.provider_id = (SELECT email FROM users WHERE id = ?)`, // Fetching email
+    [provider_id],
+    (err, results) => {
+      if (err) {
+        console.error("DB Query Error:", err);
+        return res.status(500).json({ error: err.message });
       }
-    );
-  });
-});
-
-// Update booking status
-app.put("/bookings/:id/status", verifyToken, (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
-  const user_id = req.user.id;
-
-  // Validate status value
-  if (!['pending', 'accepted', 'completed', 'cancelled'].includes(status)) {
-    return res.status(400).json({ error: "Invalid status value" });
-  }
-
-  // Fetch provider email from `users` table
-  db.query(`SELECT email FROM users WHERE id = ?`, [user_id], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
+      res.json(results);
     }
-
-    if (results.length === 0) {
-      return res.status(403).json({ error: "User not found" });
-    }
-
-    const provider_email = results[0].email;
-
-    // Check if user is either the booking client or provider
-    db.query(
-      `SELECT * FROM bookings WHERE id = ? AND (user_id = ? OR provider_id = ?)`,
-      [id, user_id, provider_email], // Compare provider_email instead of user_id
-      (err, results) => {
-        if (err) {
-          return res.status(500).json({ error: err.message });
-        }
-
-        if (results.length === 0) {
-          return res.status(403).json({ error: "You are not authorized to update this booking" });
-        }
-
-        // Update booking status
-        db.query(
-          `UPDATE bookings SET status = ? WHERE id = ?`,
-          [status, id],
-          (err) => {
-            if (err) {
-              return res.status(400).json({ error: err.message });
-            }
-            res.json({ message: "Booking status updated successfully" });
-          }
-        );
-      }
-    );
-  });
+  );
 });
-
 
 // Get provider details by ID for booking form
 app.get("/providers/:email", (req, res) => {
@@ -545,6 +479,84 @@ app.get("/providers/:email", (req, res) => {
       res.json(results[0]);  // Send provider details
     }
   );
+});
+
+
+//send mail to user
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL, // Replace with your email
+    pass: process.env.EMAIL_PASSWORD   // Use an app password if using Gmail
+  }
+});
+
+// Function to send email
+const sendEmail = async (to, subject, message) => {
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL,
+      to,
+      subject,
+      text: message
+    });
+    console.log(`Email sent to ${to}`);
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+};
+
+// Update booking status and send email
+app.put('/bookings/:bookingId/status', (req, res) => {
+  const { bookingId } = req.params;
+  const { status } = req.body;
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    return d.toLocaleDateString('en-GB'); // DD-MM-YY format
+  };
+
+  db.query(`SELECT u.email AS client_email, u.username AS client_name, 
+          b.booking_date, b.booking_time 
+          FROM bookings b 
+          JOIN users u ON b.user_id = u.id 
+          WHERE b.id = ?`, [bookingId], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    const { client_email, client_name, booking_date, booking_time } = result[0];
+    const formattedDate = formatDate(booking_date);
+    let subject, message;
+
+    if (status === 'accepted') {
+      subject = 'Service Request Accepted';
+      message = `Hello ${client_name},\n\nYour service request has been accepted. Be ready on:\nDate: ${formattedDate}\nTime: ${booking_time}\n\nThank you for choosing Service Squad!`;
+    } else if (status === 'cancelled') {
+      subject = 'Service Request Declined';
+      message = `Hello ${client_name},\n\nYour service request has been declined. Please book another service.\n\nRegards,\nService Squad Team`;
+    } else if (status === 'completed') {
+      subject = 'Thank You for Using Service Squad';
+      message = `Hello ${client_name},\n\nThank you for using Service Squad! We hope the provider delivered excellent service. Please provide a review.\n\nBest Regards,\nService Squad Team`;
+    }
+
+    // Send email
+    if (client_email) {
+      sendEmail(client_email, subject, message);
+    }
+
+    // Update booking status in database
+    db.query('UPDATE bookings SET status = ? WHERE id = ?', [status, bookingId], (err, updateResult) => {
+      if (err) {
+        return res.status(500).json({ error: 'Failed to update status' });
+      }
+      res.json({ message: 'Booking status updated and email sent' });
+    });
+  });
 });
 
 // Start the server
