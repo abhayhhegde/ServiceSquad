@@ -56,3 +56,17 @@
    ```bash
    git clone https://github.com/your-username/service-squad.git
    cd service-squad
+   
+2. **Backend Setup**
+   ```bash
+   cd backend
+   npm install
+   # Configure your SQL DB and JWT secret in .env
+   npm start
+   node server.js
+   
+3. **Frontend Setup**
+   ```bash
+   cd frontend
+   npm install
+   npm start
