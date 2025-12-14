@@ -103,6 +103,26 @@
     color: #721c24;
   }
   
+  .pending {
+    background-color: #ffeeba;
+    color: #856404;
+  }
+  
+  .accepted {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .completed {
+    background-color: #c3e6cb;
+    color: #0f5132;
+  }
+  
+  .cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
   .booking-details {
     margin-bottom: 20px;
   }

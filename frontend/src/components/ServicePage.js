@@ -78,7 +78,7 @@ const ServicesPage = () => {
         {services.map(service => (
           <Link to={service.link} key={service.id} className="service-card-link">
             <div className="service-card">
-              <img src={service.imageUrl} alt={service.title} />
+              <img src={service.imageUrl} alt="Service Image" />
               <h2>{service.title}</h2>
               <p>{service.description}</p>
             </div>
