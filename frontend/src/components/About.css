@@ -1,0 +1,51 @@
+.about-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+.about-title {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.about-subtitle {
+  font-size: 22px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.about-section-title {
+  font-size: 18px;
+  margin-top: 20px;
+  color: #444;
+}
+
+.about-text {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.about-list {
+  margin-left: 20px;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.about-list li {
+  margin-bottom: 6px;
+}
+
+.about-footer {
+  margin-top: 30px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  color: #222;
+}

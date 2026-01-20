@@ -13,7 +13,8 @@ import Plumber from './components/services/Plumber';
 import ProtectedRoute from './utils/ProtectedRoute';
 import Dashboard from './components/dashboard/Dashboard';
 import BookingForm from './components/dashboard/BookingForm';
-
+import About from './components/About';
+import Contact from './components/Contact';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -30,7 +31,8 @@ function App() {
           <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/signup" element={<SignUp setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/servicepage" element={<ServicesPage />} />
-          
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}> 
             <Route path="/become" element={<Become />} />
             <Route path="/electrician" element={<Electrician />} />
