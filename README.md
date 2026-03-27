@@ -1,166 +1,255 @@
-# 🛠️ Service Squad
+# ServiceSquad
 
-> **Your one-stop solution for reliable home services.**
+> A full-stack marketplace connecting homeowners with skilled service providers.
 
-![License](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Status](https://img.shields.io/badge/Status-Active-success)
-![Stack](https://img.shields.io/badge/Stack-React-61DAFB?logo=react&logoColor=black)
-![Backend](https://img.shields.io/badge/Backend-Node.js-339933?logo=nodedotjs&logoColor=white)
+![React](https://img.shields.io/badge/Frontend-React_18-61DAFB?logo=react&logoColor=black)
+![Node](https://img.shields.io/badge/Backend-Node.js-339933?logo=nodedotjs&logoColor=white)
+![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?logo=mysql&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 ---
 
-## 📌 Overview
+## Overview
 
-**Service Squad** is a full-stack web application that connects homeowners with skilled service providers.  
-Whether you need an **electrician, plumber, carpenter, or mechanic**, Service Squad makes booking **easy, fast, and transparent**.
-
-The platform supports a unique **Dual-Role System**, allowing users to act as both:
-- **Customers** (booking services)
-- **Service Providers** (offering services)
-
-—all from a **single account**.
+ServiceSquad lets users book home services (electrician, plumber, carpenter, and more) and also register as a service provider — all from a single account. The platform handles the full booking lifecycle with email notifications at each status change.
 
 ---
 
-## 🚀 Key Features
+## Features
 
-### 🔐 Secure Authentication
-- JWT-based authentication
-- Protected routes for authorized access
-- Secure session handling using LocalStorage
+- **Authentication** — JWT-based login/signup with protected routes and auto token refresh
+- **Service Booking** — Browse providers by category, submit requests with date, address, and description
+- **Dual-Role System** — Any user can register as a provider and manage incoming service requests
+- **Booking Lifecycle** — Pending → Accepted → Completed / Cancelled, with email notifications at each step
+- **Dashboard** — Separate views for tracking bookings as a customer and managing requests as a provider
+- **Provider Profiles** — Register with experience level, contact details, and a profile photo
 
-### 🛠️ Service Booking Platform
-- Book services across categories:
-  - Electrician
-  - Carpenter
-  - Plumber
-  - Mason
-  - Gardener
-  - Mechanic
-  - Painter
-  - Janitor
-- Real-time service request tracking
+### Supported Service Categories
 
-### 👥 Dual Role Ecosystem
-- **User Mode**
-  - Browse services
-  - Book appointments
-  - Track booking history
-- **Provider Mode**
-  - Create and manage provider profile
-  - Set experience level
-  - Accept or reject service requests
-
-### 📊 Interactive Dashboard
-- Separate dashboards for users and providers
-- Booking status indicators:
-  - 🟠 **Pending** – Request sent
-  - ✅ **Accepted** – Provider confirmed
-  - 🟢 **Completed** – Service finished
-  - ❌ **Rejected** – Service declined
-
-### 📧 Automated Notifications
-- Email alerts using **Nodemailer**
-- Notifications for:
-  - Booking confirmation
-  - Service completion
-  - Cancellation updates
+Electrician · Plumber · Carpenter · Mason · Painter · Mechanic · Gardener · Janitor
 
 ---
 
-## 📂 Project Structure
+## Tech Stack
 
-The project follows a **component-based frontend** and a **modular backend** structure.
+| Layer | Technology |
+|---|---|
+| Frontend | React 18, React Router v6, Axios, Tailwind CSS |
+| Backend | Node.js, Express.js |
+| Database | MySQL (mysql2/promise, connection pooling) |
+| Auth | JWT (jsonwebtoken), bcrypt |
+| Validation | express-validator |
+| Email | Nodemailer |
+| Security | Helmet, CORS, express-rate-limit |
+| Logging | Winston |
 
-```text
-Service-Squad/
-├── backend/
-│   ├── package.json          # Backend dependencies
-│   └── server.js             # Server entry point (API, DB, Email logic)
-│
-├── frontend/
-│   ├── public/               # Static assets
-│   ├── src/
-│   │   ├── assets/           # Service images (plumber.png, mechanic.png, etc.)
-│   │   ├── components/
-│   │   │   ├── dashboard/    # Dashboard components (BookingForm, UserBookings)
-│   │   │   ├── services/     # Service pages (Carpenter.js, Plumber.js, etc.)
-│   │   │   ├── Login.js      # Login page
-│   │   │   ├── SignUp.js     # Registration page
-│   │   │   ├── HomePage.js   # Landing page
-│   │   │   └── Header.js     # Navigation bar
-│   │   ├── utils/
-│   │   │   └── ProtectedRoute.js  # Route guard
-│   │   ├── App.js            # Application routing
-│   │   └── index.js          # Entry point
-│   └── package.json          # Frontend dependencies
-│
-└── README.md
-🛠️ Tech Stack
-Component	Technology
-Frontend	React.js, React Router, Axios, CSS3
-Backend	Node.js, Express.js
-Database	SQL (MySQL)
-Authentication	JSON Web Tokens (JWT)
-Email Service	Nodemailer
+---
 
-📦 Installation & Setup
-Follow these steps to run the project locally.
+## Project Structure
 
-1️⃣ Clone the Repository
-bash
-Copy code
-git clone https://github.com/your-username/service-squad.git
-cd service-squad
-2️⃣ Backend Setup
-bash
-Copy code
+### Backend
+
+```
+backend/
+├── 📁 config
+│   ├── 🟨 db.js              # MySQL connection pool + table initialisation
+│   ├── 🟨 env.js             # Environment variable validation (fail-fast)
+│   └── 🟨 logger.js          # Winston logger
+├── 📁 controllers
+│   ├── 🟨 authController.js
+│   ├── 🟨 bookingController.js
+│   └── 🟨 providerController.js
+├── 📁 logs
+├── 📁 middleware
+│   ├── 🟨 auth.js            # JWT verification
+│   ├── 🟨 errorHandler.js    # Global error handler
+│   └── 🟨 validation.js      # Request validation rules
+├── 📁 routes
+│   ├── 🟨 authRoutes.js
+│   ├── 🟨 bookingRoutes.js
+│   └── 🟨 providerRoutes.js
+├── 📁 services
+│   └── 🟨 emailService.js    # Nodemailer email notifications
+├── 📁 utils
+│   └── 🟨 constants.js       # Shared constants (service types, etc.)
+├── 🗂️ package-lock.json
+├── 🗂️ package.json
+└── 🟨 server.js              # Express entry point
+```
+
+### Frontend
+
+```
+frontend/
+├── 📁 public
+│   ├── 📄 index.html
+│   ├── 🖼️ logo.png
+│   ├── 🗂️ manifest.json
+│   └── 📄 robots.txt
+├── 📁 src
+│   ├── 📁 api
+│   │   └── 🟨 client.js      # Centralised Axios instance with interceptors
+│   ├── 🟨 App.js
+│   ├── 📁 assets
+│   │   ├── 🖼️ carpenters.png
+│   │   ├── 🖼️ electrician.png
+│   │   ├── 🖼️ gardener.png
+│   │   ├── 🖼️ janitor.png
+│   │   ├── 🖼️ mason.png
+│   │   ├── 🖼️ mechanic.png
+│   │   ├── 🖼️ painter.png
+│   │   └── 🖼️ plumber.png
+│   ├── 📁 components
+│   │   ├── 🟨 About.js
+│   │   ├── 🟨 Become.js
+│   │   ├── 🟨 Contact.js
+│   │   ├── 📁 dashboard
+│   │   │   ├── 🟨 BookingForm.js
+│   │   │   ├── 🟨 Dashboard.js
+│   │   │   ├── 🟨 ProviderBookings.js
+│   │   │   └── 🟨 UserBookings.js
+│   │   ├── 🟨 Footer.js
+│   │   ├── 🟨 Header.js
+│   │   ├── 🟨 HomePage.js
+│   │   ├── 🟨 Layout.js
+│   │   ├── 🟨 Login.js
+│   │   ├── 🟨 ServicePage.js
+│   │   ├── 📁 services
+│   │   │   └── 🟨 ServiceProviderList.js
+│   │   ├── 🟨 SignUp.js
+│   │   └── 📁 ui
+│   │       ├── 🟨 EmptyState.js
+│   │       ├── 🟨 LoadingSkeleton.js
+│   │       ├── 🟨 ProviderCard.js
+│   │       ├── 🟨 SectionHeader.js
+│   │       ├── 🟨 StatusBadge.js
+│   │       └── 🟨 Toast.js
+│   ├── 📁 context
+│   │   └── 🟨 AuthContext.js  # Global auth state
+│   ├── 🎨 index.css           # Tailwind directives + global styles
+│   ├── 🟨 index.js
+│   └── 📁 utils
+│       └── 🟨 ProtectedRoute.js
+├── 🗂️ package-lock.json
+├── 🗂️ package.json
+├── 🟨 postcss.config.js
+└── 🟨 tailwind.config.js
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- MySQL 8+
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/abhayhhegde/ServiceSquad.git
+cd ServiceSquad
+```
+
+### 2. Backend setup
+
+```bash
 cd backend
 npm install
-⚠️ Ensure your SQL database is running.
-Update database credentials in server.js or configure them using a .env file.
+```
 
-Start the backend server:
+Create a `.env` file in `backend/`:
 
-bash
-Copy code
-node server.js
-Backend runs at:
-👉 http://localhost:5000
+```env
+PORT=5000
+CORS_ORIGIN=http://localhost:3000
 
-3️⃣ Frontend Setup
-Open a new terminal:
+# Database
+DB_HOST=localhost
+DB_NAME=service_provider_db
+USER_NAME=your_mysql_username
+PASSWORD=your_mysql_password
 
-bash
-Copy code
+# JWT
+JWT_SECRET=your_jwt_secret_key
+
+# Email (Nodemailer)
+EMAIL=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password
+```
+
+> The database tables are created automatically on first startup. No manual migration needed.
+
+Start the backend:
+
+```bash
+npm run dev      # development (nodemon)
+npm start        # production
+```
+
+Backend runs at `http://localhost:5000`
+Health check: `GET /health`
+
+### 3. Frontend setup
+
+```bash
 cd frontend
 npm install
+```
+
+Create a `.env` file in `frontend/`:
+
+```env
+REACT_APP_API_URL=http://localhost:5000
+```
+
+Start the frontend:
+
+```bash
 npm start
-Frontend runs at:
-👉 http://localhost:3000
+```
 
-🤝 Contributing
-Contributions are welcome!
+Frontend runs at `http://localhost:3000`
 
-Fork the repository
+---
 
-Create your feature branch
+## API Endpoints
 
-bash
-Copy code
-git checkout -b feature/NewFeature
-Commit your changes
+### Auth
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/register` | Register a new user |
+| POST | `/login` | Login and receive JWT |
+| GET | `/check-email` | Check if email is already registered |
 
-bash
-Copy code
-git commit -m "Add NewFeature"
-Push to the branch
+### Providers
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| POST | `/become-provider` | Register as a service provider | Required |
+| GET | `/providers/:serviceType` | Get all providers for a service category | — |
 
-bash
-Copy code
-git push origin feature/NewFeature
-Open a Pull Request
+### Bookings
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| POST | `/bookings` | Create a new booking | Required |
+| GET | `/bookings/user` | Get all bookings for the logged-in user | Required |
+| GET | `/bookings/provider` | Get all service requests for the logged-in provider | Required |
+| PUT | `/bookings/:id/status` | Update booking status | Required |
 
-📄 License
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m "Add your feature"`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Open a Pull Request against `main`
+
+---
+
+## License
+
 Distributed under the MIT License.
-See the LICENSE file for more information.

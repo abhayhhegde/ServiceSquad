@@ -46,5 +46,4 @@ cypress/videos/
 # Miscellaneous
 *.bak
 *.tmp
-*.lock
 *.pid
