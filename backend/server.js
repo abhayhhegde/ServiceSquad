@@ -6,11 +6,12 @@
  *   - controllers/  → request handling
  *   - services/     → business logic (email, etc.)
  *   - config/       → database, logger, env validation
- *   - middleware/    → auth, etc.
+ *   - middleware/    → auth, validation, error handling
  *   - utils/        → shared constants
  */
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 
 // Load and validate environment variables FIRST
@@ -19,6 +20,7 @@ validateEnv();
 
 const logger = require('./config/logger');
 const { initializeDatabase } = require('./config/db');
+const { errorHandler } = require('./middleware/errorHandler');
 
 // Route imports
 const authRoutes = require('./routes/authRoutes');
@@ -29,8 +31,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // ──────────────────────────────────────────────
-// Middleware
+// Security & Parsing Middleware
 // ──────────────────────────────────────────────
+app.use(helmet()); // Security headers (X-Frame-Options, CSP, etc.)
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
@@ -38,8 +41,8 @@ app.use(
     credentials: true,
   })
 );
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 // ──────────────────────────────────────────────
 // Routes
@@ -52,6 +55,11 @@ app.use('/', bookingRoutes);
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
+
+// ──────────────────────────────────────────────
+// Global Error Handler (must be LAST middleware)
+// ──────────────────────────────────────────────
+app.use(errorHandler);
 
 // ──────────────────────────────────────────────
 // Start Server

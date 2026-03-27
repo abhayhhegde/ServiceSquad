@@ -9,17 +9,21 @@ const logger = require('../config/logger');
 const SALT_ROUNDS = 10;
 
 /**
- * POST /register
+ * POST /register (validated by middleware)
  */
 const register = async (req, res) => {
     try {
         const { username, password, email, phone } = req.body;
 
-        if (!username || !password || !email || !phone) {
-            return res.status(400).json({ error: 'All fields are required' });
+        // Check if username or email already exists
+        const [existing] = await pool.query(
+            'SELECT id FROM users WHERE username = ? OR email = ?',
+            [username, email]
+        );
+        if (existing.length > 0) {
+            return res.status(409).json({ error: 'Username or email already exists' });
         }
 
-        // Hash the password before storing
         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
         const [result] = await pool.query(
@@ -27,23 +31,19 @@ const register = async (req, res) => {
             [username, hashedPassword, email, phone]
         );
 
-        res.status(201).json({ id: result.insertId });
+        res.status(201).json({ id: result.insertId, message: 'Registration successful' });
     } catch (err) {
         logger.error('Registration error:', err);
-        res.status(400).json({ error: err.message });
+        res.status(500).json({ error: 'Registration failed. Please try again.' });
     }
 };
 
 /**
- * POST /login
+ * POST /login (validated by middleware)
  */
 const login = async (req, res) => {
     try {
         const { username, password } = req.body;
-
-        if (!username || !password) {
-            return res.status(400).json({ message: 'Username and password are required' });
-        }
 
         const [rows] = await pool.query(
             'SELECT * FROM users WHERE username = ?',
@@ -51,12 +51,12 @@ const login = async (req, res) => {
         );
 
         if (rows.length === 0) {
-            return res.status(401).json({ message: 'User not found' });
+            // Use generic message to prevent username enumeration
+            return res.status(401).json({ message: 'Invalid credentials' });
         }
 
         const user = rows[0];
 
-        // Compare hashed password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).json({ message: 'Invalid credentials' });
@@ -80,7 +80,9 @@ const login = async (req, res) => {
 };
 
 /**
- * GET /check-email/:email
+ * GET /check-email/:email (validated by middleware)
+ * Used internally to look up provider user details.
+ * Returns minimal info to prevent full email enumeration.
  */
 const checkEmail = async (req, res) => {
     try {
@@ -92,13 +94,14 @@ const checkEmail = async (req, res) => {
         );
 
         if (rows.length > 0) {
-            res.json(rows[0]);
+            res.json({ exists: true, username: rows[0].username, phone: rows[0].phone });
         } else {
-            res.status(404).json({ message: 'Email not found' });
+            // Return consistent shape to prevent enumeration
+            res.json({ exists: false });
         }
     } catch (err) {
         logger.error('Check email error:', err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 

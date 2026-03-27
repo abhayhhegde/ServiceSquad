@@ -15,20 +15,22 @@ function validateService(service) {
 }
 
 /**
- * POST /become-service-provider
+ * POST /become-service-provider (requires auth + validation)
  */
 const becomeProvider = async (req, res) => {
     try {
         const { service, experience, address, email } = req.body;
         const image = req.file ? req.file.buffer : null;
 
-        if (!service || !experience || !address || !email) {
-            return res.status(400).json({ error: 'All fields are required' });
-        }
-
         const tableName = validateService(service);
         if (!tableName) {
             return res.status(400).json({ error: 'Invalid service selected' });
+        }
+
+        // Verify the logged-in user matches the email being registered
+        const [userCheck] = await pool.query('SELECT email FROM users WHERE id = ?', [req.user.id]);
+        if (!userCheck.length || userCheck[0].email !== email) {
+            return res.status(403).json({ error: 'You can only register yourself as a provider' });
         }
 
         const connection = await pool.getConnection();
@@ -60,37 +62,8 @@ const becomeProvider = async (req, res) => {
 };
 
 /**
- * GET /service-provider/:service/:email
- */
-const getProviderByEmail = async (req, res) => {
-    try {
-        const { service, email } = req.params;
-
-        const tableName = validateService(service);
-        if (!tableName) {
-            return res.status(400).json({ error: 'Invalid service selected' });
-        }
-
-        const [rows] = await pool.query(
-            `SELECT service, experience, address, email, image FROM ${tableName} WHERE email = ?`,
-            [email]
-        );
-
-        if (rows.length > 0) {
-            const provider = rows[0];
-            provider.image = provider.image ? provider.image.toString('base64') : null;
-            res.json(provider);
-        } else {
-            res.status(404).json({ message: 'No provider found' });
-        }
-    } catch (err) {
-        logger.error('Get provider error:', err);
-        res.status(500).json({ error: err.message });
-    }
-};
-
-/**
- * GET /service-providers/:service
+ * GET /service-providers/:service (validated by middleware)
+ * Fixed N+1: Uses JOIN to fetch provider + user details in a single query.
  */
 const getProvidersByService = async (req, res) => {
     try {
@@ -101,8 +74,12 @@ const getProvidersByService = async (req, res) => {
             return res.status(400).json({ error: 'Invalid service selected' });
         }
 
+        // Single JOIN query instead of N+1 API calls
         const [rows] = await pool.query(
-            `SELECT service, experience, address, email, image FROM ${tableName}`
+            `SELECT p.service, p.experience, p.address, p.email, p.image,
+                    u.username, u.phone
+             FROM ${tableName} p
+             LEFT JOIN users u ON p.email = u.email`
         );
 
         const providers = rows.map((provider) => ({
@@ -113,7 +90,7 @@ const getProvidersByService = async (req, res) => {
         res.json(providers);
     } catch (err) {
         logger.error('Get providers by service error:', err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: 'Failed to fetch providers' });
     }
 };
 
@@ -163,12 +140,12 @@ const checkProviderStatus = async (req, res) => {
         res.json({ isProvider });
     } catch (err) {
         logger.error('Check provider status error:', err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: 'Failed to check provider status' });
     }
 };
 
 /**
- * GET /providers/:email
+ * GET /providers/:email (validated by middleware)
  */
 const getProviderDetails = async (req, res) => {
     try {
@@ -181,7 +158,7 @@ const getProviderDetails = async (req, res) => {
         );
 
         if (!rows.length) {
-            return res.status(404).json({ message: 'Provider not found' });
+            return res.status(404).json({ error: 'Provider not found' });
         }
 
         res.json(rows[0]);
@@ -193,7 +170,6 @@ const getProviderDetails = async (req, res) => {
 
 module.exports = {
     becomeProvider,
-    getProviderByEmail,
     getProvidersByService,
     checkProviderStatus,
     getProviderDetails,

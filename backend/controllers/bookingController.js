@@ -6,17 +6,13 @@ const logger = require('../config/logger');
 const { sendEmail } = require('../services/emailService');
 
 /**
- * POST /bookings (requires auth)
+ * POST /bookings (requires auth + validation)
  */
 const createBooking = async (req, res) => {
     try {
         const { provider_id, service_type, booking_date, booking_time, address, description } = req.body;
         const user_id = req.user.id;
         const decodedProviderId = decodeURIComponent(provider_id);
-
-        if (!decodedProviderId || !service_type || !booking_date || !booking_time || !address) {
-            return res.status(400).json({ error: 'All required fields must be provided' });
-        }
 
         const [result] = await pool.query(
             `INSERT INTO bookings (user_id, provider_id, service_type, booking_date, booking_time, address, description)
@@ -50,7 +46,7 @@ const getUserBookings = async (req, res) => {
         res.json(rows);
     } catch (err) {
         logger.error('Get user bookings error:', err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: 'Failed to fetch bookings' });
     }
 };
 
@@ -72,21 +68,23 @@ const getProviderBookings = async (req, res) => {
         res.json(rows);
     } catch (err) {
         logger.error('Get provider bookings error:', err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: 'Failed to fetch provider bookings' });
     }
 };
 
 /**
- * PUT /bookings/:bookingId/status
+ * PUT /bookings/:bookingId/status (requires auth + validation + ownership check)
  */
 const updateBookingStatus = async (req, res) => {
     try {
         const { bookingId } = req.params;
         const { status } = req.body;
+        const userId = req.user.id;
 
+        // Fetch booking with user and provider info
         const [rows] = await pool.query(
-            `SELECT u.email AS client_email, u.username AS client_name,
-              b.booking_date, b.booking_time
+            `SELECT b.user_id, b.provider_id, b.booking_date, b.booking_time,
+              u.email AS client_email, u.username AS client_name
        FROM bookings b
        JOIN users u ON b.user_id = u.id
        WHERE b.id = ?`,
@@ -97,7 +95,30 @@ const updateBookingStatus = async (req, res) => {
             return res.status(404).json({ error: 'Booking not found' });
         }
 
-        const { client_email, client_name, booking_date, booking_time } = rows[0];
+        const booking = rows[0];
+
+        // Authorization: check if the user is the booking owner or the provider
+        const [providerCheck] = await pool.query(
+            `SELECT email FROM users WHERE id = ?`,
+            [userId]
+        );
+        const userEmail = providerCheck[0]?.email;
+        const isBookingOwner = booking.user_id === userId;
+        const isBookingProvider = booking.provider_id === userEmail;
+
+        if (!isBookingOwner && !isBookingProvider) {
+            return res.status(403).json({ error: 'Not authorized to update this booking' });
+        }
+
+        // Business logic: only certain transitions are allowed
+        if (status === 'cancelled' && !isBookingOwner && !isBookingProvider) {
+            return res.status(403).json({ error: 'Only the booking owner or provider can cancel' });
+        }
+        if ((status === 'accepted' || status === 'completed') && !isBookingProvider) {
+            return res.status(403).json({ error: 'Only the provider can accept or complete bookings' });
+        }
+
+        const { client_email, client_name, booking_date, booking_time } = booking;
         const formattedDate = new Date(booking_date).toLocaleDateString('en-GB');
 
         let subject, message;
@@ -124,7 +145,7 @@ const updateBookingStatus = async (req, res) => {
             [status, bookingId]
         );
 
-        res.json({ message: 'Booking status updated and email sent' });
+        res.json({ message: 'Booking status updated successfully' });
     } catch (err) {
         logger.error('Update booking status error:', err);
         res.status(500).json({ error: 'Failed to update status' });
